@@ -1,14 +1,21 @@
 import Vapor
 
-struct ExoplanetController: Sendable {
-    private let exoplanetService: ExoplanetService
+struct ExoplanetController: RouteCollection, Sendable {
+    private let exoplanetService: ExoplanetAnalyzerAPIProtocol
 
-    init(exoplanetService: ExoplanetService) {
+    init(exoplanetService: ExoplanetAnalyzerAPIProtocol) {
         self.exoplanetService = exoplanetService
     }
 
+    func boot(routes: RoutesBuilder) throws {
+        let exoplanets = routes.grouped("exoplanets")
+        exoplanets.get("orphans", use: getOrphanPlanets)
+        exoplanets.get("hottest", use: getHottestExoplanet)
+        exoplanets.get("timeline", use: getDiscoveryTimeline)
+    }
+
     @Sendable
-    func getOrphanPlanets(req: Request) async throws -> [VaporExoplanetDTO] {
+    func getOrphanPlanets(req: Request) async throws -> [ExoplanetResponse] {
         do {
             return try await exoplanetService.fetchOrphanPlanets()
         } catch {
@@ -17,7 +24,7 @@ struct ExoplanetController: Sendable {
     }
 
     @Sendable
-    func getHottestExoplanet(req: Request) async throws -> VaporExoplanetDTO {
+    func getHottestExoplanet(req: Request) async throws -> ExoplanetResponse {
         do {
             return try await exoplanetService.fetchHottestStarExoplanet()
         } catch {
@@ -26,7 +33,7 @@ struct ExoplanetController: Sendable {
     }
 
     @Sendable
-    func getDiscoveryTimeline(req: Request) async throws -> VaporYearlyPlanetSizeDistributionDTOResponse {
+    func getDiscoveryTimeline(req: Request) async throws -> YearlyPlanetSizeDistributionResponse {
         do {
             return try await exoplanetService.fetchDiscoveryTimeline()
         } catch {

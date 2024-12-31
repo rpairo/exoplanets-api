@@ -1,9 +1,8 @@
 import Vapor
 
-func routes(_ app: Application) async throws {
-    let exoplanetController = ExoplanetController(exoplanetService: ExoplanetService())
+func routes(_ app: Application) throws {
+    let exoplanetService = ExoplanetService()
+    let exoplanetController = ExoplanetController(exoplanetService: exoplanetService)
 
-    app.get("orphans", use: exoplanetController.getOrphanPlanets)
-    app.get("hottest", use: exoplanetController.getHottestExoplanet)
-    app.get("timeline", use: exoplanetController.getDiscoveryTimeline)
+    try app.register(collection: exoplanetController)
 }

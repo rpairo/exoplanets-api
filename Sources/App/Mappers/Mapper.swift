@@ -1,8 +1,8 @@
 import ExoplanetAPI
 
 struct Mapper {
-    static func transformToLocalModel(from exoplanetDTO: ExoplanetDTO) -> VaporExoplanetDTO {
-        return VaporExoplanetDTO(
+    static func transformToLocalModel(from exoplanetDTO: ExoplanetDTO) -> ExoplanetResponse {
+        return ExoplanetResponse(
             planetIdentifier: exoplanetDTO.planetIdentifier,
             typeFlag: exoplanetDTO.typeFlag,
             planetaryMassJpt: exoplanetDTO.planetaryMassJpt,
@@ -30,11 +30,11 @@ struct Mapper {
         )
     }
 
-    static func transformToLocalModel(from planetSizeCountDTO: PlanetSizeCountDTO) -> VaporPlanetSizeCountDTO {
-        return VaporPlanetSizeCountDTO(
-            smallPlanets: planetSizeCountDTO.smallPlanets,
-            mediumPlanets: planetSizeCountDTO.mediumPlanets,
-            largePlanets: planetSizeCountDTO.largePlanets
+    static func transformToLocalModel(from planetSizeCountDTO: PlanetSizeCountDTO) -> PlanetSizeCountResponse {
+        return PlanetSizeCountResponse(
+            small: planetSizeCountDTO.small,
+            medium: planetSizeCountDTO.small,
+            large: planetSizeCountDTO.small
         )
     }
 }

@@ -1,5 +1,5 @@
 {
-  "originHash" : "e8b53e760de5f6b3f8b680948383f6138ced634140984e8152d9a82b7f78333e",
+  "originHash" : "07391994727ccfc815ccb5d2c19d463e649ae1d286da3a057df8e016fbc7d8c9",
   "pins" : [
     {
       "identity" : "async-http-client",
@@ -33,8 +33,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/rpairo/exoplanets.git",
       "state" : {
-        "revision" : "66b60a29137646b7b1bdf8001af7369979f74391",
-        "version" : "1.0.4"
+        "revision" : "f9ea019dc47639a90826ab790cafb56bccc57dba",
+        "version" : "1.0.5"
       }
     },
     {
