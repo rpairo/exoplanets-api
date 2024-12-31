@@ -5,36 +5,21 @@ on:
     branches:
       - '**'
 
+permissions:
+  contents: read
+
+concurrency:
+  group: validate-pr
+  cancel-in-progress: true
+
 jobs:
   validate-pr:
-    name: Validate Pull Request
-    runs-on: ubuntu-latest
-    if: ${{ github.event_name == 'pull_request' }}
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-    
-      - name: Retrieve AWS Secrets
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: ${{ secrets.AWS_REGION }}
-        run: |
-          api_secrets=$(aws secretsmanager get-secret-value \
-            --secret-id exoplanets-analyzer-api-url-test \
-            --query SecretString \
-            --output text)
-
-          echo "BASE_URL=$(echo "$api_secrets" | jq -r .BASE_URL)" >> $GITHUB_ENV
-          echo "PATH_SEGMENT=$(echo "$api_secrets" | jq -r .PATH_SEGMENT)" >> $GITHUB_ENV
-          echo "ENDPOINT_EXOPLANETS=$(echo "$api_secrets" | jq -r .ENDPOINT_EXOPLANETS)" >> $GITHUB_ENV
-
-      - name: Run Tests with Swift 6.0.3
-        uses: docker://swift:6.0.3
-        env:
-          BASE_API_URL: ${{ env.BASE_URL }}
-          PATH_SEGMENT: ${{ env.PATH_SEGMENT }}
-          ENDPOINT_EXOPLANETS: ${{ env.ENDPOINT_EXOPLANETS }}
-        with:
-          args: swift test
+    # Skip this job if the PR is still a draft
+    if: ${{ github.event.pull_request.draft == false }}
+    # Instead of "runs-on" and "steps", we use "uses" to call the reusable workflow
+    uses: ./.github/workflows/test-swift.yml
+    # We must place "secrets:" at the job level
+    secrets:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_REGION: ${{ secrets.AWS_REGION }}
