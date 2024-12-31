@@ -1,0 +1,45 @@
+name: Pull Request Validation
+
+on:
+  pull_request:
+    branches:
+      - '**'
+
+jobs:
+  validate-pr:
+    name: Validate Pull Request
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'pull_request' }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Swift
+        uses: swiftorg/actions/setup-swift@v1
+        with:
+          swift-version: 6.0.3  # Usando la misma versión que ExoplanetAnalyzer
+    
+      - name: Retrieve AWS Secrets
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+        run: |
+          api_secrets=$(aws secretsmanager get-secret-value \
+            --secret-id exoplanets-analyzer-api-url-test \
+            --query SecretString \
+            --output text)
+
+          echo "BASE_URL=$(echo "$api_secrets" | jq -r .BASE_URL)" >> $GITHUB_ENV
+          echo "PATH_SEGMENT=$(echo "$api_secrets" | jq -r .PATH_SEGMENT)" >> $GITHUB_ENV
+          echo "ENDPOINT_EXOPLANETS=$(echo "$api_secrets" | jq -r .ENDPOINT_EXOPLANETS)" >> $GITHUB_ENV
+
+      - name: Run Tests with Swift 6.0.3
+        uses: docker://swift:6.0.3
+        env:
+          BASE_API_URL: ${{ env.BASE_URL }}
+          PATH_SEGMENT: ${{ env.PATH_SEGMENT }}
+          ENDPOINT_EXOPLANETS: ${{ env.ENDPOINT_EXOPLANETS }}
+        with:
+          args: swift test
