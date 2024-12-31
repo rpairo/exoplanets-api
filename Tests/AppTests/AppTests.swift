@@ -5,5 +5,5 @@ import ExoplanetAPI
 
 @Suite("App Tests")
 struct AppTests {
-    
+
 }
