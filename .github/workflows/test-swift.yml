@@ -1,0 +1,60 @@
+name: Reusable Swift Test
+
+on:
+  workflow_call:
+    # Required secrets from the caller
+    secrets:
+      AWS_ACCESS_KEY_ID:
+        required: true
+      AWS_SECRET_ACCESS_KEY:
+        required: true
+      AWS_REGION:
+        required: true
+    # Optional: inputs if you want to parameterize further
+
+jobs:
+  swift-test-job:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+
+      - name: Retrieve API Secrets from AWS
+        run: |
+          api_secrets=$(aws secretsmanager get-secret-value \
+            --secret-id exoplanets-analyzer-api-url-test \
+            --query SecretString \
+            --output text)
+
+          BASE_URL=$(echo "$api_secrets" | jq -r '.BASE_URL')
+          PATH_SEGMENT=$(echo "$api_secrets" | jq -r '.PATH_SEGMENT')
+          ENDPOINT_EXOPLANETS=$(echo "$api_secrets" | jq -r '.ENDPOINT_EXOPLANETS')
+
+          echo "::add-mask::$BASE_URL"
+          echo "::add-mask::$PATH_SEGMENT"
+          echo "::add-mask::$ENDPOINT_EXOPLANETS"
+
+          echo "BASE_URL=$BASE_URL" >> $GITHUB_ENV
+          echo "PATH_SEGMENT=$PATH_SEGMENT" >> $GITHUB_ENV
+          echo "ENDPOINT_EXOPLANETS=$ENDPOINT_EXOPLANETS" >> $GITHUB_ENV
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+
+      - name: Run Swift Tests
+        uses: docker://swift:6.0.3
+        env:
+          BASE_API_URL: ${{ env.BASE_URL }}
+          PATH_SEGMENT: ${{ env.PATH_SEGMENT }}
+          ENDPOINT_EXOPLANETS: ${{ env.ENDPOINT_EXOPLANETS }}
+        with:
+          # Example: "swift test --enable-code-coverage" for coverage
+          args: swift test
+
+      - name: Upload test artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-reports
+          path: .build
