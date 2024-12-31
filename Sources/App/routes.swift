@@ -1,130 +1,96 @@
 import Vapor
-import ExoplanetAPI
+@preconcurrency import ExoplanetAPI
 
-public struct VaporExoplanetDTODos: Content {
-    public let planetIdentifier: String?
-    public let typeFlag: Int?
-    public let planetaryMassJpt: Double?
-    public let radiusJpt: Double?
-    public let periodDays: Double?
-    public let semiMajorAxisAU: Double?
-    public let eccentricity: String?
-    public let periastronDeg: String?
-    public let longitudeDeg: String?
-    public let ascendingNodeDeg: String?
-    public let inclinationDeg: Double?
-    public let surfaceTempK: String?
-    public let ageGyr: String?
-    public let discoveryMethod: String?
-    public let discoveryYear: Int?
-    public let lastUpdated: String?
-    public let rightAscension: String?
-    public let declination: String?
-    public let distFromSunParsec: String?
-    public let hostStarMassSlrMass: Double?
-    public let hostStarRadiusSlrRad: Double?
-    public let hostStarMetallicity: Double?
-    public let hostStarTempK: Int?
-    public let hostStarAgeGyr: String?
+// MARK: - Routes
+func routes(_ app: Application) async throws {
+    let exoplanetController = await ExoplanetController(exoplanetService: .init(analyzer: try .init()))
+
+    // Define routes
+    app.get("orphans", use: exoplanetController.getOrphanPlanets)
+    app.get("hottest", use: exoplanetController.getHottestExoplanet)
+    app.get("timeline", use: exoplanetController.getDiscoveryTimeline)
 }
 
-func routes(_ app: Application) throws {
-    app.get { req async in
-        "It works!"
+// MARK: - Controller
+
+struct ExoplanetController: Sendable {
+    private let exoplanetService: ExoplanetService
+
+    init(exoplanetService: ExoplanetService) {
+        self.exoplanetService = exoplanetService
     }
 
-    app.get("hello") { req async -> String in
-        "Hello, world!"
-    }
-
-    app.get("orphans") { req async throws -> [VaporExoplanetDTO] in
+    // Get orphan planets
+    @Sendable
+    func getOrphanPlanets(req: Request) async throws -> [VaporExoplanetDTO] {
         do {
-            let analyzer = try await ExoplanetAnalyzerAPI()
-            guard let orphans = analyzer.getOrphanPlanets() else {
-                throw Abort(.notFound, reason: "No orphan planets found")
-            }
-
-            // Map ExoplanetDTO to VaporExoplanetDTO
-            let orphanDTOs = orphans.map { transformToLocalModel(from: $0) }
-            return orphanDTOs
+            let orphans = try await exoplanetService.fetchOrphanPlanets()
+            return orphans.map { Mapper.transformToLocalModel(from: $0) }
         } catch {
-            throw Abort(.internalServerError, reason: error.localizedDescription)
+            throw Abort(.notFound, reason: "No orphan planets found")
         }
     }
 
-    // Endpoint to get hottest exoplanet
-    app.get("hottest") { req async throws -> VaporExoplanetDTO in
+    // Get the hottest star exoplanet
+    @Sendable
+    func getHottestExoplanet(req: Request) async throws -> VaporExoplanetDTO {
         do {
-            let analyzer = try await ExoplanetAnalyzerAPI()
-            guard let hottestExoplanet = analyzer.getHottestStarExoplanet() else {
-                throw Abort(.notFound, reason: "No hottest star exoplanet found")
-            }
-
-            let result = transformToLocalModel(from: hottestExoplanet)
-            return result
+            let hottestExoplanet = try await exoplanetService.fetchHottestStarExoplanet()
+            return Mapper.transformToLocalModel(from: hottestExoplanet)
         } catch {
-            throw Abort(.internalServerError, reason: error.localizedDescription)
+            throw Abort(.notFound, reason: "No hottest star exoplanet found")
         }
     }
 
-    // Endpoint to get discovery timeline
-    app.get("timeline") { req async throws -> VaporYearlyPlanetSizeDistributionDTOResponse in
+    // Get discovery timeline
+    @Sendable
+    func getDiscoveryTimeline(req: Request) async throws -> VaporYearlyPlanetSizeDistributionDTOResponse {
         do {
-            let analyzer = try await ExoplanetAnalyzerAPI()
-            guard let timeline = analyzer.getDiscoveryTimeline() else {
-                throw Abort(.notFound, reason: "No discovery timeline found")
-            }
-
-            // Convert the dictionary to a sorted list of items by year
+            let timeline = try await exoplanetService.fetchDiscoveryTimeline()
             let sortedTimeline = timeline.sorted { $0.key < $1.key }
 
-            // Map to the desired response format
             let items = sortedTimeline.map { (year, planetSizeCount) in
-                let size = transformToLocalModel(from: planetSizeCount)
+                let size = Mapper.transformToLocalModel(from: planetSizeCount)
                 return VaporYearlyPlanetSizeDistributionItemDTO(year: year, planetSizeCount: size)
             }
 
-            let response = VaporYearlyPlanetSizeDistributionDTOResponse(data: items)
-            return response
+            return VaporYearlyPlanetSizeDistributionDTOResponse(data: items)
         } catch {
-            throw Abort(.internalServerError, reason: error.localizedDescription)
+            throw Abort(.notFound, reason: "No discovery timeline found")
         }
     }
+}
 
-    @Sendable func transformToLocalModel(from exoplanetDTO: ExoplanetDTO) -> VaporExoplanetDTO {
-        return VaporExoplanetDTO(
-            planetIdentifier: exoplanetDTO.planetIdentifier,
-            typeFlag: exoplanetDTO.typeFlag,
-            planetaryMassJpt: exoplanetDTO.planetaryMassJpt,
-            radiusJpt: exoplanetDTO.radiusJpt,
-            periodDays: exoplanetDTO.periodDays,
-            semiMajorAxisAU: exoplanetDTO.semiMajorAxisAU,
-            eccentricity: exoplanetDTO.eccentricity,
-            periastronDeg: exoplanetDTO.periastronDeg,
-            longitudeDeg: exoplanetDTO.longitudeDeg,
-            ascendingNodeDeg: exoplanetDTO.ascendingNodeDeg,
-            inclinationDeg: exoplanetDTO.inclinationDeg,
-            surfaceTempK: exoplanetDTO.surfaceTempK,
-            ageGyr: exoplanetDTO.ageGyr,
-            discoveryMethod: exoplanetDTO.discoveryMethod,
-            discoveryYear: exoplanetDTO.discoveryYear,
-            lastUpdated: exoplanetDTO.lastUpdated,
-            rightAscension: exoplanetDTO.rightAscension,
-            declination: exoplanetDTO.declination,
-            distFromSunParsec: exoplanetDTO.distFromSunParsec,
-            hostStarMassSlrMass: exoplanetDTO.hostStarMassSlrMass,
-            hostStarRadiusSlrRad: exoplanetDTO.hostStarRadiusSlrRad,
-            hostStarMetallicity: exoplanetDTO.hostStarMetallicity,
-            hostStarTempK: exoplanetDTO.hostStarTempK,
-            hostStarAgeGyr: exoplanetDTO.hostStarAgeGyr
-        )
+// MARK: - Service Layer
+
+struct ExoplanetService: Sendable {
+    private let analyzer: ExoplanetAnalyzerAPI
+
+    init(analyzer: ExoplanetAnalyzerAPI) {
+        self.analyzer = analyzer
     }
 
-    @Sendable func transformToLocalModel(from planetSizeCountDTO: PlanetSizeCountDTO) -> VaporPlanetSizeCountDTO {
-        return VaporPlanetSizeCountDTO(
-            smallPlanets: planetSizeCountDTO.smallPlanets,
-            mediumPlanets: planetSizeCountDTO.mediumPlanets,
-            largePlanets: planetSizeCountDTO.largePlanets
-        )
+    // Fetch orphan planets
+    func fetchOrphanPlanets() async throws -> [ExoplanetDTO] {
+        guard let orphans = analyzer.getOrphanPlanets() else {
+            throw Abort(.notFound, reason: "No orphan planets found")
+        }
+        return orphans
+    }
+
+    // Fetch the hottest star exoplanet
+    func fetchHottestStarExoplanet() async throws -> ExoplanetDTO {
+        guard let hottestExoplanet = analyzer.getHottestStarExoplanet() else {
+            throw Abort(.notFound, reason: "No hottest star exoplanet found")
+        }
+        return hottestExoplanet
+    }
+
+    // Fetch the discovery timeline
+    func fetchDiscoveryTimeline() async throws -> YearlyPlanetSizeDistributionDTO {
+        guard let timeline = analyzer.getDiscoveryTimeline() else {
+            throw Abort(.notFound, reason: "No discovery timeline found")
+        }
+        return timeline
     }
 }
