@@ -29,9 +29,9 @@ kubectl apply -f k8s/base/exoplanets-api-deployment.yaml
 echo "Deployment completed successfully."
 
 if [[ "$current_context" == "docker-desktop" ]]; then
+  echo "Running on Docker Desktop. Setting up local 'NodePort' configuration and port-forwarding."
   kubectl apply -f k8s/base/exoplanets-api-local-service.yaml
 
-  echo "Running on Docker Desktop. I have to forward the TCP ports to be able to connect with Exoplanet service."
   echo "Checking if service 'exoplanets-api-service' is ready..."
 
   while true; do
@@ -43,7 +43,6 @@ if [[ "$current_context" == "docker-desktop" ]]; then
     echo "Service not ready yet. Retrying in 2 seconds..."
     sleep 2
   done
-
   kubectl port-forward service/exoplanets-api-service 8080:80
 else
   kubectl apply -f k8s/base/exoplanets-api-cluster-service.yaml
