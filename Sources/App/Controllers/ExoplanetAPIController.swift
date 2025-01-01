@@ -1,6 +1,6 @@
 import Vapor
 
-struct ExoplanetAPIController: RouteCollection, Sendable {
+struct ExoplanetsAPIController: RouteCollection, Sendable {
     private let exoplanetService: ExoplanetAnalyzerAPIProtocol
 
     init(exoplanetService: ExoplanetAnalyzerAPIProtocol) {

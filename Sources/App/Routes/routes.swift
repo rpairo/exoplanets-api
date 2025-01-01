@@ -7,7 +7,7 @@ func routes(_ app: Application) throws {
     let imageService = GoogleImageService(client: app.client)
     let exoplanetService = ExoplanetService(client: app.client, imageService: imageService)
 
-    let apiController = ExoplanetAPIController(exoplanetService: exoplanetService)
+    let apiController = ExoplanetsAPIController(exoplanetService: exoplanetService)
     try app.register(collection: apiController)
 
     let websiteController = ExoplanetWebsiteController(exoplanetService: exoplanetService)

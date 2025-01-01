@@ -32,8 +32,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/rpairo/exoplanets.git",
       "state" : {
-        "revision" : "30bdfcf7022441784da3c2f9cd1734a7b73a327a",
-        "version" : "1.0.6"
+        "revision" : "15f408ec015a76a94691dc8405257d6be04733e5",
+        "version" : "1.0.10"
       }
     },
     {

@@ -1,4 +1,4 @@
-import ExoplanetAPI
+import ExoplanetsAPI
 import Vapor
 
 protocol ExoplanetAnalyzerAPIProtocol: Sendable {

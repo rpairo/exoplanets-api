@@ -1,7 +1,7 @@
 @testable import App
 import XCTVapor
 import Testing
-import ExoplanetAPI
+import ExoplanetsAPI
 
 @Suite("App Tests")
 struct AppTests {

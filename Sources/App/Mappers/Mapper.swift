@@ -1,4 +1,4 @@
-import ExoplanetAPI
+import ExoplanetsAPI
 
 struct Mapper {
     static func transformToLocalModel(from exoplanetDTO: ExoplanetDTO, imageUrl: String?) -> ExoplanetResponse {

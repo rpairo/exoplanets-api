@@ -12,7 +12,7 @@ let package = Package(
         // Dependencia de Swift NIO
         .package(url: "https://github.com/apple/swift-nio.git", from: "2.65.0"),
         // Dependencia de Exoplanets
-        .package(url: "https://github.com/rpairo/exoplanets.git", from: "1.0.5"),
+        .package(url: "https://github.com/rpairo/exoplanets.git", from: "1.0.10"),
         // Dependencia de Leaf
         .package(url: "https://github.com/vapor/leaf.git", from: "4.0.0")
     ],
@@ -26,7 +26,7 @@ let package = Package(
                 .product(name: "NIOCore", package: "swift-nio"),
                 .product(name: "NIOPosix", package: "swift-nio"),
                 // Producto de Exoplanets
-                .product(name: "ExoplanetAPI", package: "exoplanets"),
+                .product(name: "ExoplanetsAPI", package: "exoplanets"),
                 // Producto de Leaf
                 .product(name: "Leaf", package: "leaf")
             ],
