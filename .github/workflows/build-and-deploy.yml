@@ -52,19 +52,19 @@ jobs:
           username: ${{ env.USERNAME }}
           password: ${{ env.PASSWORD }}
     
-      - name: Build Docker Image for ExoplanetTerminal
+      - name: Build Docker Image for ExoplanetsAPI
         run: |
-          docker build -t rpairo/exoplanet-terminal:latest .
+          docker build -t rpairo/exoplanets-api:latest .
       
-      - name: Scan Docker Image for ExoplanetTerminal
+      - name: Scan Docker Image for ExoplanetsAPI
         uses: docker/scout-action@v1
         with:
           command: cves
-          image: rpairo/exoplanet-terminal:latest
+          image: rpairo/exoplanets-api:latest
           only-severities: critical,high
           exit-code: true
       
-      - name: Push Docker Image for ExoplanetTerminal
+      - name: Push Docker Image for ExoplanetsAPI
         if: success()
         run: |
-          docker push rpairo/exoplanet-terminal:latest
+          docker push rpairo/exoplanets-api:latest
