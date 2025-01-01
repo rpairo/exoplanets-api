@@ -1,0 +1,61 @@
+#extend("base"):
+    #export("title"):
+        Welcome to Exoplanet Explorer
+    #endexport
+    #export("body"):
+        <section class="text-center my-5">
+            <div class="container">
+                <h1 class="display-4">Welcome to Exoplanet Explorer</h1>
+                <p class="lead">Discover fascinating data about exoplanets beyond our solar system.</p>
+            </div>
+        </section>
+
+        <section class="my-5">
+            <div class="container">
+                <div class="row">
+                    <!-- Orphan Planets Card -->
+                    <div class="col-md-4">
+                        <div class="card shadow-sm">
+                            <div class="card-body text-center">
+                                <h5 class="card-title">🪐 Orphan Planets</h5>
+                                <p class="card-text">Explore planets drifting alone through space without a host star.</p>
+                                <a href="/website/orphans" class="btn btn-elegant">
+                                    <span class="btn-text">View Orphan Planets</span>
+                                    <span class="btn-icon" aria-hidden="true">🚀</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Hottest Exoplanet Card -->
+                    <div class="col-md-4">
+                        <div class="card shadow-sm">
+                            <div class="card-body text-center">
+                                <h5 class="card-title">🌟 Hottest Exoplanet</h5>
+                                <p class="card-text">Learn about the hottest star exoplanet ever discovered.</p>
+                                <a href="/website/hottest" class="btn btn-elegant">
+                                    <span class="btn-text">View Hottest Exoplanet</span>
+                                    <span class="btn-icon" aria-hidden="true">🚀</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Discovery Timeline Card -->
+                    <div class="col-md-4">
+                        <div class="card shadow-sm">
+                            <div class="card-body text-center">
+                                <h5 class="card-title">📅 Discovery Timeline</h5>
+                                <p class="card-text">Dive into the history of exoplanet discoveries over the years.</p>
+                                <a href="/website/timeline" class="btn btn-elegant">
+                                    <span class="btn-text">View Discovery Timeline</span>
+                                    <span class="btn-icon" aria-hidden="true">🚀</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    #endexport
+#endextend

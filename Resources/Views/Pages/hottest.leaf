@@ -1,0 +1,18 @@
+#extend("base"):
+    #export("title"):
+        Hottest Exoplanet
+    #endexport
+    #export("body"):
+        <h2 class="text-center">Hottest Star Exoplanet</h2>
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">🌟 #(planet.planetIdentifier)</h5>
+                <p class="card-text">
+                    <strong>Host Star Temperature:</strong> #(planet.hostStarTempK) K<br>
+                    <strong>Discovery Year:</strong> #(planet.discoveryYear)<br>
+                    <strong>Discovery Method:</strong> #(planet.discoveryMethod)<br>
+                </p>
+            </div>
+        </div>
+    #endexport
+#endextend

@@ -1,0 +1,29 @@
+#extend("base"):
+    #export("title"):
+        Orphan Planets
+    #endexport
+    #export("body"):
+        <h2 class="text-center">Orphan Planets</h2>
+        #if(count(planets) > 0):
+            <div class="row justify-content-center">
+                #for(planet in planets):
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">🪐 #(planet.planetIdentifier)</h5>
+                                <p class="card-text">
+                                    <strong>Discovery Year:</strong> #(planet.discoveryYear)<br>
+                                    <strong>Discovery Method:</strong> #(planet.discoveryMethod)<br>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                #endfor
+            </div>
+        #else:
+            <div class="alert alert-warning text-center my-4" role="alert">
+                🚨 No orphan planets data available. Check back later!
+            </div>
+        #endif
+    #endexport
+#endextend

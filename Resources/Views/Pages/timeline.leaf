@@ -1,0 +1,44 @@
+#extend("base"):
+    #export("title"):
+        Discovery Timeline
+    #endexport
+    #export("body"):
+        <section class="my-5">
+            <div class="text-center mb-4">
+                <h2 class="fw-bold text-light">Discovery Timeline</h2>
+                <p class="text-light">
+                    Discover the fascinating history of exoplanet exploration.
+                </p>
+            </div>
+
+            #if(count(timeline.data) > 0):
+                <div class="table-responsive">
+                    <table class="table align-middle custom-table">
+                        <thead>
+                            <tr>
+                                <th class="py-3">Year</th>
+                                <th class="py-3">Small 🌑</th>
+                                <th class="py-3">Medium 🪐</th>
+                                <th class="py-3">Large 🌕</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            #for(item in timeline.data):
+                                <tr>
+                                    <td class="fw-bold">#(item.year)</td>
+                                    <td>#(item.planetSizeCount.small)</td>
+                                    <td>#(item.planetSizeCount.medium)</td>
+                                    <td>#(item.planetSizeCount.large)</td>
+                                </tr>
+                            #endfor
+                        </tbody>
+                    </table>
+                </div>
+            #else:
+                <div class="alert alert-warning text-center my-4" role="alert">
+                    🚨 No timeline data available. Check back later!
+                </div>
+            #endif
+        </section>
+    #endexport
+#endextend
