@@ -7,20 +7,9 @@ protocol ExoplanetAnalyzerAPIProtocol: Sendable {
     func fetchDiscoveryTimeline() async throws -> YearlyPlanetSizeDistributionResponse
 }
 
-extension Sequence {
-    func asyncMap<T>(
-        _ transform: (Element) async throws -> T
-    ) async rethrows -> [T] {
-        var results = [T]()
-        for element in self {
-            try await results.append(transform(element))
-        }
-        return results
-    }
-}
-
 struct ExoplanetService: ExoplanetAnalyzerAPIProtocol {
     let client: Client
+    let imageService: ImageSearchServiceProtocol
 
     func fetchOrphanPlanets() async throws -> [ExoplanetResponse] {
         let analyzer = try await ExoplanetAnalyzerAPI()
@@ -29,7 +18,7 @@ struct ExoplanetService: ExoplanetAnalyzerAPIProtocol {
         }
 
         return await orphans.asyncMap { dto in
-            let imageUrl = try? await fetchImageFromGoogle(for: dto.planetIdentifier ?? "")
+            let imageUrl = try? await imageService.fetchImage(for: dto.planetIdentifier ?? "")
             return Mapper.transformToLocalModel(from: dto, imageUrl: imageUrl)
         }
     }
@@ -39,7 +28,7 @@ struct ExoplanetService: ExoplanetAnalyzerAPIProtocol {
         guard let hottestExoplanet = analyzer.getHottestStarExoplanet() else {
             throw Abort(.notFound, reason: "No hottest star exoplanet found")
         }
-        let imageUrl = try? await fetchImageFromGoogle(for: hottestExoplanet.planetIdentifier ?? "")
+        let imageUrl = try? await imageService.fetchImage(for: hottestExoplanet.planetIdentifier ?? "")
         return Mapper.transformToLocalModel(from: hottestExoplanet, imageUrl: imageUrl)
     }
 
@@ -55,56 +44,14 @@ struct ExoplanetService: ExoplanetAnalyzerAPIProtocol {
         }
         return YearlyPlanetSizeDistributionResponse(data: items)
     }
+}
 
-    func fetchImageFromGoogle(for planetIdentifier: String) async throws -> String? {
-        guard let apiKey = Environment.get("GOOGLE_API_KEY"),
-              let searchEngineId = Environment.get("GOOGLE_SEARCH_ENGINE_ID") else {
-            throw Abort(.internalServerError, reason: "Missing API key or Search Engine ID in environment variables")
+extension Sequence {
+    func asyncMap<T>(_ transform: (Element) async throws -> T) async rethrows -> [T] {
+        var results = [T]()
+        for element in self {
+            try await results.append(transform(element))
         }
-
-        let url = "https://www.googleapis.com/customsearch/v1"
-        let queryParams: [String: String] = [
-            "q": planetIdentifier,
-            "searchType": "image",
-            "key": apiKey,
-            "cx": searchEngineId,
-            "num": "1"
-        ]
-
-        let response = try await client.get(URI(string: url), headers: [:]) { req in
-            try req.query.encode(queryParams)
-        }
-
-        guard let responseBody = response.body,
-              let responseData = responseBody.getData(at: 0, length: responseBody.readableBytes) else {
-            throw Abort(.notFound, reason: "No response data from Google API")
-        }
-
-        let json = try JSONSerialization.jsonObject(with: responseData, options: [])
-
-        if let jsonObject = json as? [String: Any],
-           let items = jsonObject["items"] as? [[String: Any]],
-           let firstItem = items.first,
-           let link = firstItem["link"] as? String {
-            return link
-        }
-
-        return nil
+        return results
     }
-}
-
-struct NasaImageSearchResponse: Content {
-    let collection: NasaImageCollection
-}
-
-struct NasaImageCollection: Content {
-    let items: [NasaImageItem]
-}
-
-struct NasaImageItem: Content {
-    let links: [NasaImageLink]
-}
-
-struct NasaImageLink: Content {
-    let href: String
 }
