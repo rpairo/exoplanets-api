@@ -18,6 +18,11 @@ else
 fi
 
 echo "Deploying Kubernetes resources..."
-kubectl apply -f k8s/base/exoplanets-terminal-job.yaml
+
+kubectl delete deployment exoplanets-api-deployment
+kubectl delete service exoplanets-api-service
+
+kubectl apply -f k8s/base/exoplanets-api-deployment.yaml
+kubectl apply -f k8s/base/exoplanets-api-service.yaml
 
 echo "Deployment completed successfully."
