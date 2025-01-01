@@ -1,5 +1,5 @@
 @testable import App
-import VaporTesting
+import XCTVapor
 import Testing
 import ExoplanetAPI
 

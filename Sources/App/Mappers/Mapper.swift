@@ -1,7 +1,7 @@
 import ExoplanetAPI
 
 struct Mapper {
-    static func transformToLocalModel(from exoplanetDTO: ExoplanetDTO) -> ExoplanetResponse {
+    static func transformToLocalModel(from exoplanetDTO: ExoplanetDTO, imageUrl: String?) -> ExoplanetResponse {
         return ExoplanetResponse(
             planetIdentifier: exoplanetDTO.planetIdentifier,
             typeFlag: exoplanetDTO.typeFlag,
@@ -26,7 +26,8 @@ struct Mapper {
             hostStarRadiusSlrRad: exoplanetDTO.hostStarRadiusSlrRad,
             hostStarMetallicity: exoplanetDTO.hostStarMetallicity,
             hostStarTempK: exoplanetDTO.hostStarTempK,
-            hostStarAgeGyr: exoplanetDTO.hostStarAgeGyr
+            hostStarAgeGyr: exoplanetDTO.hostStarAgeGyr,
+            imageUrl: imageUrl
         )
     }
 

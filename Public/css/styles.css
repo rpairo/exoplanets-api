@@ -57,3 +57,12 @@ body {
 .btn {
     font-weight: bold;
 }
+
+.card-img-top {
+    width: 100%; /* Asegura que la imagen ocupe todo el ancho del contenedor */
+    height: auto; /* Mantiene la proporción */
+    max-height: 250px; /* Aumenta la altura máxima */
+    object-fit: cover; /* Recorta las imágenes para que encajen */
+    border-radius: 10px 10px 0 0; /* Redondea las esquinas superiores */
+    margin: 0 auto; /* Centra la imagen horizontalmente */
+}

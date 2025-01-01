@@ -25,4 +25,5 @@ struct ExoplanetResponse: Content {
     let hostStarMetallicity: Double?
     let hostStarTempK: Int?
     let hostStarAgeGyr: String?
+    let imageUrl: String?
 }

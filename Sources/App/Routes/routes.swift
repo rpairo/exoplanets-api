@@ -1,7 +1,7 @@
 import Vapor
 
 func routes(_ app: Application) throws {
-    let exoplanetService = ExoplanetService()
+    let exoplanetService = ExoplanetService(client: app.client)
 
     let apiController = ExoplanetAPIController(exoplanetService: exoplanetService)
     try app.register(collection: apiController)

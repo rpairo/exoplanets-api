@@ -3,17 +3,26 @@
         Orphan Planets
     #endexport
     #export("body"):
-        <h2 class="text-center">Orphan Planets</h2>
+        <h2 class="text-center mb-4">Orphan Planets</h2>
         #if(count(planets) > 0):
             <div class="row justify-content-center">
                 #for(planet in planets):
-                    <div class="col-md-4">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">🪐 #(planet.planetIdentifier)</h5>
-                                <p class="card-text">
+                    <div class="col-md-6 col-lg-4 d-flex mb-4">
+                        <div class="card w-100" style="border: none; border-radius: 12px; overflow: hidden; background: rgba(255, 255, 255, 0.1);">
+                            #if(planet.imageUrl):
+                                <img src="#(planet.imageUrl)" class="card-img-top" alt="Image of #(planet.planetIdentifier)"
+                                     style="height: 250px; object-fit: cover;">
+                            #else:
+                                <div class="d-flex align-items-center justify-content-center bg-secondary text-light"
+                                     style="height: 250px;">
+                                    No Image
+                                </div>
+                            #endif
+                            <div class="card-body" style="background: rgba(255, 255, 255, 0.1);">
+                                <h5 class="card-title text-left">🪐 #(planet.planetIdentifier)</h5>
+                                <p class="card-text text-left">
                                     <strong>Discovery Year:</strong> #(planet.discoveryYear)<br>
-                                    <strong>Discovery Method:</strong> #(planet.discoveryMethod)<br>
+                                    <strong>Discovery Method:</strong> #(planet.discoveryMethod)
                                 </p>
                             </div>
                         </div>
