@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: exoplanets-api-deployment
+  labels:
+    app: exoplanets-api
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: exoplanets-api
+  template:
+    metadata:
+      labels:
+        app: exoplanets-api
+    spec:
+      containers:
+        - name: exoplanets-api-container
+          image: rpairo/exoplanets-api:latest
+          ports:
+            - containerPort: 8080
+          env:
+            - name: BASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: exoplanets-local-secrets
+                  key: BASE_URL
+            - name: PATH_SEGMENT
+              valueFrom:
+                secretKeyRef:
+                  name: exoplanets-local-secrets
+                  key: PATH_SEGMENT
+            - name: ENDPOINT_EXOPLANETS
+              valueFrom:
+                secretKeyRef:
+                  name: exoplanets-local-secrets
+                  key: ENDPOINT_EXOPLANETS
+            - name: GOOGLE_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: exoplanets-local-secrets
+                  key: GOOGLE_API_KEY
+            - name: GOOGLE_SEARCH_ENGINE_ID
+              valueFrom:
+                secretKeyRef:
+                  name: exoplanets-local-secrets
+                  key: GOOGLE_SEARCH_ENGINE_ID
