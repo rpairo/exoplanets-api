@@ -9,7 +9,6 @@ struct RootController: RouteCollection {
     }
 
     func renderHomePage(req: Request) async throws -> View {
-        // Renderiza la misma vista para ambas rutas
         try await req.view.render("Pages/index")
     }
 }

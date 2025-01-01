@@ -1,13 +1,12 @@
-
-    <footer class="footer mt-auto py-3 text-white">
-        <div class="container text-center">
-            <p class="mb-1">
-                Made with <span style="color: red;">♥</span>, <span style="color: #f39c12;">caffeine</span>, and probably some <span style="color: #3498db;">debugging tears</span>.
-            </p>
-            <p>
-                Crafted by <strong>Raul Pera Pairo</strong>, while exploring the vast cosmos of code for
-                <span style="font-style: italic; color: #00d1b2;">"Exoplanet Explorer"</span>. 🚀
-            </p>
-            <small class="text-white">© 2025. All rights reserved — even the funny bits!</small>
-        </div>
-    </footer>
+<footer class="footer mt-auto py-3 text-white">
+    <div class="container text-center">
+        <p class="mb-1">
+            Made with <span style="color: red;">♥</span>, <span style="color: #f39c12;">caffeine</span>, and probably some <span style="color: #3498db;">debugging tears</span>.
+        </p>
+        <p>
+            Crafted by <strong>Raul Pera Pairo</strong>, while exploring the vast cosmos of code for
+            <span style="font-style: italic; color: #00d1b2;">"Exoplanet Explorer"</span>. 🚀
+        </p>
+        <small class="text-white">© 2025. All rights reserved — even the funny bits!</small>
+    </div>
+</footer>

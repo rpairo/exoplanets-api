@@ -2,7 +2,7 @@ import ExoplanetsAPI
 
 struct Mapper {
     static func transformToLocalModel(from exoplanetDTO: ExoplanetDTO, imageUrl: String?) -> ExoplanetResponse {
-        return ExoplanetResponse(
+        ExoplanetResponse(
             planetIdentifier: exoplanetDTO.planetIdentifier,
             typeFlag: exoplanetDTO.typeFlag,
             planetaryMassJpt: exoplanetDTO.planetaryMassJpt,
@@ -32,7 +32,7 @@ struct Mapper {
     }
 
     static func transformToLocalModel(from planetSizeCountDTO: PlanetSizeCountDTO) -> PlanetSizeCountResponse {
-        return PlanetSizeCountResponse(
+        PlanetSizeCountResponse(
             small: planetSizeCountDTO.small,
             medium: planetSizeCountDTO.small,
             large: planetSizeCountDTO.small
