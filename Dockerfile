@@ -1,7 +1,7 @@
 # ================================
 # Build image
 # ================================
-FROM swift:5.9-jammy AS build
+FROM swift:6.0-jammy AS build
 
 # Set up a build area
 WORKDIR /build
@@ -10,11 +10,11 @@ WORKDIR /build
 COPY ./Package.* ./
 RUN swift package resolve
 
-# Copy entire repo into container
+# Copy the entire project
 COPY . .
 
-# Build the application with optimizations and static linking
-RUN swift build -c release --static-swift-stdlib
+# Build the application with optimizations
+RUN swift build -c release
 
 # ================================
 # Run image
