@@ -3,10 +3,11 @@ kind: Service
 metadata:
   name: exoplanets-api-service
 spec:
-  type: LoadBalancer
+  type: NodePort
   selector:
     app: exoplanets-api
   ports:
     - protocol: TCP
       port: 80
       targetPort: 8080
+      nodePort: 31378  # Optional, Kubernetes can assign one if not specified

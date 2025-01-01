@@ -26,3 +26,20 @@ kubectl apply -f k8s/base/exoplanets-api-deployment.yaml
 kubectl apply -f k8s/base/exoplanets-api-service.yaml
 
 echo "Deployment completed successfully."
+
+if [[ "$current_context" == "docker-desktop" ]]; then
+  echo "Running on Docker Desktop. Proceeding with secrets creation..."
+  echo "Waiting for service 'exoplanets-api-service' to be ready..."
+
+  while true; do
+    ready_pods=$(kubectl get pods --selector=app=exoplanets-api --field-selector=status.phase=Running --no-headers | wc -l)
+    if [[ "$ready_pods" -ge 1 ]]; then
+      echo "Service is ready. Proceeding with port-forwarding..."
+      break
+    fi
+    echo "Service not ready yet. Retrying in 2c seconds..."
+    sleep 2
+  done
+
+  kubectl port-forward service/exoplanets-api-service 8080:80
+fi
