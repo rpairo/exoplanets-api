@@ -12,7 +12,7 @@ struct ExoplanetService: ExoplanetAnalyzerAPIProtocol {
     let imageService: ImageSearchServiceProtocol
 
     func fetchOrphanPlanets() async throws -> [ExoplanetResponse] {
-        let analyzer = try await ExoplanetAnalyzerAPI()
+        let analyzer = try await ExoplanetAnalyzerAPI.makeDefault()
         guard let orphans = analyzer.getOrphanPlanets() else {
             throw Abort(.notFound, reason: "No orphan planets found")
         }
@@ -24,7 +24,7 @@ struct ExoplanetService: ExoplanetAnalyzerAPIProtocol {
     }
 
     func fetchHottestStarExoplanet() async throws -> ExoplanetResponse {
-        let analyzer = try await ExoplanetAnalyzerAPI()
+        let analyzer = try await ExoplanetAnalyzerAPI.makeDefault()
         guard let hottestExoplanet = analyzer.getHottestStarExoplanet() else {
             throw Abort(.notFound, reason: "No hottest star exoplanet found")
         }
@@ -33,7 +33,7 @@ struct ExoplanetService: ExoplanetAnalyzerAPIProtocol {
     }
 
     func fetchDiscoveryTimeline() async throws -> YearlyPlanetSizeDistributionResponse {
-        let analyzer = try await ExoplanetAnalyzerAPI()
+        let analyzer = try await ExoplanetAnalyzerAPI.makeDefault()
         guard let timeline = analyzer.getDiscoveryTimeline() else {
             throw Abort(.notFound, reason: "No discovery timeline found")
         }
