@@ -64,23 +64,47 @@ Another option is to open the project by Xcode, and run the test by pressing `"C
 ![Manual testing](https://github.com/user-attachments/assets/491e9f3f-659c-4a21-8301-5959a4e18131)
 
 ## Requeriments
-To properly run the project, it will be expecting 5 env vars.
-- BASE_URL
-- PATH_SEGMENT
-- ENDPOINT_EXOPLANETS
-- GOOGLE_API_KEY
-- GOOGLE_SEARCH_ENGINE_ID
+To properly run the project, it will be expecting 5 env vars. They will be fetched by AWS Secrets Manager if you use the AWS CLI with the "-aws-".sh to run Docker and Kubernetes.
+- **BASE_URL**
+- **PATH_SEGMENT**
+- **ENDPOINT_EXOPLANETS**
+- **GOOGLE_API_KEY**
+- **GOOGLE_SEARCH_ENGINE_ID**
 
 ## Docker
+you can run it in docker by the scripts that I have prepared for it.
+- **/docker/setup-docker.sh**: easiest way, just inject the env vars and run run docker.
+- **/docker/setup-docker-aws-secrets-sh**: if you want to use the AWS secrets Manager, **it requires AWS CLI installed**.
+
+![ExoplanetAPI in Dcoker](https://github.com/user-attachments/assets/f1f60453-3e68-4706-a992-8ce051882bbb)
 
 ## Download
+You can find the image in Docker Hub by: https://hub.docker.com/repository/docker/rpairo/exoplanets-api/general
 
-## Run
+![ExoplanetAPI DockerHub](https://github.com/user-attachments/assets/b2a8a3a0-1ad4-4930-ab93-18af430532de)
 
 ## Kubernetes
+**I recommend to deploy by [deploy-k8s-resources-easy.sh](k8s/scripts/deploy-k8s-resources-easy.sh). Since will set up everything straigh forward.
+You can choose the other ways if you prefer checking the other scripts I made.**
+
+Kubernetes has required beyond investigation, cause as well as in the ExoplanetsAnalyzer project, I am running Kubernetes by Docker Desktop, and this makes not easily to work with.
+
+After further investigations, I have found out the way to solve the missing calls to my running services: port-forwarding.
+In /k8s/ directory will find the [deploy-k8s-resources.sh](k8s/scripts/deploy-k8s-resources.sh) file, who has all the logic to set up the ENV VARs, clean up the secrets, deploy the image and if you are using docker, will wait until the service is running to perform the port-forward. It is the only way I have found to be able to reach out the service in kubernetes by docker desktop.
+
+![Running by deploy-k8s-resources-easy.sh](https://github.com/user-attachments/assets/c0810231-5d9d-4496-9316-28fd80ea46f4)
+![Kubernetes all](https://github.com/user-attachments/assets/6d0dafa1-5067-4ab3-8d9d-c3252cd0104a)
 
 ## Xcode
+To run it by xcode, will be important to set up few configurations:
+- **ENV VAR**: Xcode will not share the ENV VARs with the OS, they must to be injected by Xcode Scheme.
 
+The path to get this menu is: **Product -> Scheme -> Edit Scheme -> (your-target) -> Arguments**
+
+![](https://github.com/user-attachments/assets/c146473f-71fe-478e-a59e-50f438a02146)
+
+- **Working Directory**: To be able to run properly the server, Vapor recommends to enable the working directory option and set it up pointing to the project root. This option will not shared by xcodes, so it must to be set up manually.
+![](https://github.com/user-attachments/assets/86a10b80-d06f-45c6-8ad3-013caf157565)
 
 ### Project Structure
 The project follows a modular architecture with the following components:
