@@ -27,19 +27,37 @@ struct GoogleImageService: ImageSearchServiceProtocol {
             try req.query.encode(queryParams)
         }
 
-        guard let responseBody = response.body,
-              let responseData = responseBody.getData(at: 0, length: responseBody.readableBytes) else {
+        // Check for missing response body
+        guard let responseBody = response.body else {
             throw Abort(.notFound, reason: "No response data from Google API")
         }
 
-        let json = try JSONSerialization.jsonObject(with: responseData, options: [])
-        if let jsonObject = json as? [String: Any],
-           let items = jsonObject["items"] as? [[String: Any]],
-           let firstItem = items.first,
-           let link = firstItem["link"] as? String {
-            return link
+        // Check for empty data in response body
+        guard let responseData = responseBody.getData(at: 0, length: responseBody.readableBytes), !responseData.isEmpty else {
+            throw Abort(.notFound, reason: "No response data from Google API")
         }
 
-        return nil
+        do {
+            let json = try JSONSerialization.jsonObject(with: responseData, options: [])
+            guard let jsonObject = json as? [String: Any],
+                  let items = jsonObject["items"] as? [[String: Any]] else {
+                throw Abort(.badRequest, reason: "Invalid JSON structure or missing data")
+            }
+
+            // Handle empty items array
+            guard !items.isEmpty else {
+                return nil
+            }
+
+            // Extract the link from the first item
+            guard let firstItem = items.first,
+                  let link = firstItem["link"] as? String else {
+                throw Abort(.badRequest, reason: "Invalid JSON structure or missing link")
+            }
+
+            return link
+        } catch {
+            throw Abort(.badRequest, reason: "Malformed JSON: \(error.localizedDescription)")
+        }
     }
 }

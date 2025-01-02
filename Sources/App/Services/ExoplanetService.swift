@@ -1,18 +1,24 @@
-import ExoplanetsAPI
+@preconcurrency import ExoplanetsAPI
 import Vapor
 
-protocol ExoplanetAnalyzerAPIProtocol: Sendable {
+protocol ExoplanetAnalyzerServiceable: Sendable {
     func fetchOrphanPlanets() async throws -> [ExoplanetResponse]
     func fetchHottestStarExoplanet() async throws -> ExoplanetResponse
     func fetchDiscoveryTimeline() async throws -> YearlyPlanetSizeDistributionResponse
 }
 
-struct ExoplanetService: ExoplanetAnalyzerAPIProtocol {
-    let client: Client
-    let imageService: ImageSearchServiceProtocol
+struct ExoplanetService: ExoplanetAnalyzerServiceable {
+    private let client: Client
+    private let imageService: ImageSearchServiceProtocol
+    private let analyzer: ExoplanetAnalyzerAPIProtocol
+
+    init(client: Client, imageService: ImageSearchServiceProtocol, analyzer: ExoplanetAnalyzerAPIProtocol) {
+        self.client = client
+        self.imageService = imageService
+        self.analyzer = analyzer
+    }
 
     func fetchOrphanPlanets() async throws -> [ExoplanetResponse] {
-        let analyzer = try await ExoplanetAnalyzerAPI.makeDefault()
         guard let orphans = analyzer.getOrphanPlanets() else {
             throw Abort(.notFound, reason: "No orphan planets found")
         }
@@ -24,7 +30,6 @@ struct ExoplanetService: ExoplanetAnalyzerAPIProtocol {
     }
 
     func fetchHottestStarExoplanet() async throws -> ExoplanetResponse {
-        let analyzer = try await ExoplanetAnalyzerAPI.makeDefault()
         guard let hottestExoplanet = analyzer.getHottestStarExoplanet() else {
             throw Abort(.notFound, reason: "No hottest star exoplanet found")
         }
@@ -33,7 +38,6 @@ struct ExoplanetService: ExoplanetAnalyzerAPIProtocol {
     }
 
     func fetchDiscoveryTimeline() async throws -> YearlyPlanetSizeDistributionResponse {
-        let analyzer = try await ExoplanetAnalyzerAPI.makeDefault()
         guard let timeline = analyzer.getDiscoveryTimeline() else {
             throw Abort(.notFound, reason: "No discovery timeline found")
         }

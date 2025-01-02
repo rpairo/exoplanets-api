@@ -1,13 +1,12 @@
 import Vapor
+import ExoplanetsAPI
 
-func routes(_ app: Application) throws {
-    let appConfig = AppConfig()
+func routes(_ app: Application) async throws {
+    let appConfig = try AppConfig()
 
-    let rootController = RootController()
-    try app.register(collection: rootController)
-    
+    let analyzer = try await ExoplanetAnalyzerAPI.makeDefault()
     let imageService = GoogleImageService(client: app.client, config: appConfig)
-    let exoplanetService = ExoplanetService(client: app.client, imageService: imageService)
+    let exoplanetService = ExoplanetService(client: app.client, imageService: imageService, analyzer: analyzer)
 
     let apiController = ExoplanetsAPIController(exoplanetService: exoplanetService)
     try app.register(collection: apiController)

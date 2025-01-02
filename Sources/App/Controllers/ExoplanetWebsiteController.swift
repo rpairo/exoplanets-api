@@ -1,14 +1,18 @@
 import Vapor
 
 struct ExoplanetWebsiteController: RouteCollection, Sendable {
-    private let exoplanetService: ExoplanetAnalyzerAPIProtocol
+    private let exoplanetService: ExoplanetAnalyzerServiceable
 
-    init(exoplanetService: ExoplanetAnalyzerAPIProtocol) {
+    init(exoplanetService: ExoplanetAnalyzerServiceable) {
         self.exoplanetService = exoplanetService
     }
 
     func boot(routes: RoutesBuilder) throws {
+        routes.get(use: renderHomePage)
+
         let website = routes.grouped("website")
+        website.get(use: renderHomePage)
+
         website.get("orphans", use: showOrphanPlanets)
         website.get("hottest", use: showHottestExoplanet)
         website.get("timeline", use: showDiscoveryTimeline)
@@ -30,5 +34,10 @@ struct ExoplanetWebsiteController: RouteCollection, Sendable {
     func showDiscoveryTimeline(req: Request) async throws -> View {
         let timeline = try await exoplanetService.fetchDiscoveryTimeline()
         return try await req.view.render("Pages/timeline", ["timeline": timeline])
+    }
+
+    @Sendable
+    func renderHomePage(req: Request) async throws -> View {
+        try await req.view.render("Pages/index")
     }
 }

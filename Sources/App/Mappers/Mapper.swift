@@ -34,8 +34,8 @@ struct Mapper {
     static func transformToLocalModel(from planetSizeCountDTO: PlanetSizeCountDTO) -> PlanetSizeCountResponse {
         PlanetSizeCountResponse(
             small: planetSizeCountDTO.small,
-            medium: planetSizeCountDTO.small,
-            large: planetSizeCountDTO.small
+            medium: planetSizeCountDTO.medium,
+            large: planetSizeCountDTO.large
         )
     }
 }
