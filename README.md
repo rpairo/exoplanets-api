@@ -1,8 +1,19 @@
 # Exoplanets API
 
-The Exoplanets API is a Swift-based web service that provides information about exoplanets. It fetches data from a [ExoplanetAnalyzer](https://github.com/rpairo/exoplanets), processes it, and exposes endpoints for clients to retrieve information such as orphan exoplanets, the hottest star exoplanet, and a discovery timeline of exoplanets grouped by size.
+[The Exoplanets API](https://github.com/rpairo/exoplanets-api) is a Swift-based web service that provides information about exoplanets. It fetches data from a [ExoplanetAnalyzer](https://github.com/rpairo/exoplanets) importing it as Swift Package Manager as a [library](https://github.com/rpairo/exoplanets/releases/tag/v1.0.12). Then processes the received data, and exposes endpoints for clients to retrieve information such as orphan exoplanets, the hottest star exoplanet, and a discovery timeline of exoplanets grouped by size.
 
 It also provides a website to improve your experience navigating into it.
+It also uses a Google Custom Search API to fetch the exoplanet image. It would works dinamically. Before to use the google search api I have tried the NASA images one and the Wikimedia. But there were not pictures about these exoplanets. I thought maybe google could has, yes!
+
+**NASA**:
+- https://api.nasa.gov
+- https://images.nasa.gov/
+
+**Google**
+- https://developers.google.com/custom-search
+
+
+The json models will be a mirror of exoplanet ones, but I have added also the URL of its picture, just to collaborate a bit to improve it.
 
 ## Endpoints
 When the server is running, you can access to two different services at same time: Website or API.
@@ -51,6 +62,24 @@ In order to make easier to run the testing, I have created the file [setup-tests
 Another option is to open the project by Xcode, and run the test by pressing `"CMD + U"`
 
 ![Manual testing](https://github.com/user-attachments/assets/491e9f3f-659c-4a21-8301-5959a4e18131)
+
+## Requeriments
+To properly run the project, it will be expecting 5 env vars.
+- BASE_URL
+- PATH_SEGMENT
+- ENDPOINT_EXOPLANETS
+- GOOGLE_API_KEY
+- GOOGLE_SEARCH_ENGINE_ID
+
+## Docker
+
+## Download
+
+## Run
+
+## Kubernetes
+
+## Xcode
 
 
 ### Project Structure
