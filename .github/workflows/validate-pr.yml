@@ -15,9 +15,7 @@ concurrency:
 jobs:
   validate-pr:
     if: ${{ github.event.pull_request.draft == false }}
-    # Instead of "runs-on" and "steps", we use "uses" to call the reusable workflow
     uses: ./.github/workflows/test-swift.yml
-    # We must place "secrets:" at the job level
     secrets:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}

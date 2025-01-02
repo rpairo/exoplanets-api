@@ -13,5 +13,8 @@ if [ -z "$BASE_URL" ] || [ -z "$PATH_SEGMENT" ] || [ -z "$ENDPOINT_EXOPLANETS" ]
     exit 1
 fi
 
+echo "Resolving dependencies..."
+swift package resolve
+
 echo "Running Swift Tests..."
 swift test

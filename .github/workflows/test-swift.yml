@@ -2,7 +2,6 @@ name: Reusable Swift Test
 
 on:
   workflow_call:
-    # Required secrets from the caller
     secrets:
       AWS_ACCESS_KEY_ID:
         required: true
@@ -10,7 +9,6 @@ on:
         required: true
       AWS_REGION:
         required: true
-    # Optional: inputs if you want to parameterize further
 
 jobs:
   swift-test-job:
@@ -50,7 +48,6 @@ jobs:
           PATH_SEGMENT: ${{ env.PATH_SEGMENT }}
           ENDPOINT_EXOPLANETS: ${{ env.ENDPOINT_EXOPLANETS }}
         with:
-          # Example: "swift test --enable-code-coverage" for coverage
           args: swift test
 
       - name: Upload test artifacts
