@@ -1,59 +1,60 @@
 # Exoplanets API
 
-[The Exoplanets API](https://github.com/rpairo/exoplanets-api) is a Swift-based web service that provides information about exoplanets. It fetches data from a [ExoplanetAnalyzer](https://github.com/rpairo/exoplanets) importing it as Swift Package Manager as a [library](https://github.com/rpairo/exoplanets/releases/tag/v1.0.12). Then processes the received data, and exposes endpoints for clients to retrieve information such as orphan exoplanets, the hottest star exoplanet, and a discovery timeline of exoplanets grouped by size.
+The [Exoplanets API](https://github.com/rpairo/exoplanets-api) is a Swift-based web service that fetches data from the [ExoplanetAnalyzer](https://github.com/rpairo/exoplanets), processes it, and exposes endpoints to retrieve exoplanet-related information. It is imported as a [library](https://github.com/rpairo/exoplanets/releases/tag/v1.0.12) via Swift Package Manager.
 
-It also provides a website to improve your experience navigating into it.
-It also uses a Google Custom Search API to fetch the exoplanet image. It would works dinamically. Before to use the google search api I have tried the NASA images one and the Wikimedia. But there were not pictures about these exoplanets. I thought maybe google could has, yes!
+This project also provides a website for a user-friendly navigation experience. Additionally, it integrates the Google Custom Search API to dynamically fetch exoplanet images, addressing the lack of images from sources like NASA and Wikimedia.
+- NASA Resources:
+	- [API](https://api.nasa.gov)
+	- [Image Search](https://images.nasa.gov/)
+- Google Custom Search:
+	- [Developer Documentation](https://developers.google.com/custom-search)
 
-**NASA**:
-- https://api.nasa.gov
-- https://images.nasa.gov/
-
-**Google**
-- https://developers.google.com/custom-search
-
-
-The json models will be a mirror of exoplanet ones, but I have added also the URL of its picture, just to collaborate a bit to improve it.
+The API’s JSON models mirror the exoplanet data while including a URL for the exoplanet’s image.
 
 ## Endpoints
-When the server is running, you can access to two different services at same time: Website or API.
+The server simultaneously provides a website and an API:
 
-- **API**: By using the API path, you will be able to retrieve in JSON format the information from ExoplanetAnalyzer.
-    - localhost:8080/api/orphans
-    - localhost:8080/api/hottest
-    - localhost:8080/api/timeline
+### API (JSON Responses)
+. **/api/orphans**: Retrieve orphan exoplanets.
 
-- **Website**: By using the API path, you will be able to retrieve in JSON format the information from ExoplanetAnalyzer.
-    - localhost:8080/website/
-    - localhost:8080/website/orphans
-    - localhost:8080/website/hottest
-    - localhost:8080/website/timeline
+. **/api/hottest**: Fetch the exoplanet orbiting the hottest star.
 
-## Website
-### /website/
+. **/api/timeline**: Get a discovery timeline categorized by exoplanet size.
+
+### Website (HTML Pages)
+. **/website/**: Homepage of the exoplanet service.
+
+. **/website/orphans**: View orphan exoplanets.
+
+. **/website/hottest**: See the hottest star’s exoplanet.
+
+. **/website/timeline**: Explore the discovery timeline.
+
+## Visual Examples
+
+### Website
+#### /website/
 ![Orphans](https://github.com/user-attachments/assets/68e81179-8401-4553-8c59-3e358f9fec6d)
 
-### /website/orphans
+#### /website/orphans
 ![Orphans](https://github.com/user-attachments/assets/defc00f0-b745-4cc4-a748-6099f15d0c84)
 
-### /website/hottest
+#### /website/hottest
 ![Orphans](https://github.com/user-attachments/assets/ca940fc4-d4b4-45fb-a0a4-498290d8f841)
 
-### /website/timeline
+#### /website/timeline
 ![Orphans](https://github.com/user-attachments/assets/38a6008d-f561-43e0-9346-30546a6cbd3e)
 
 
-## API (JSON)
-### /api/orphans
+### API (JSON)
+#### /api/orphans
 ![Orphans](https://github.com/user-attachments/assets/8b2bc416-af59-4741-9693-26a87121147c)
 
-
-### /api/hottest
+#### /api/hottest
 ![Hottest](https://github.com/user-attachments/assets/b8b66bd0-6af6-43a7-b040-a9605a764291)
 
-### /api/timeline
+#### /api/timeline
 ![Timeline](https://github.com/user-attachments/assets/e36eeb0f-c700-4173-ac6b-1d911f4923a6)
-
 
 ## Testing
 #### Running the tests
@@ -106,6 +107,9 @@ The path to get this menu is: **Product -> Scheme -> Edit Scheme -> (your-target
 - **Working Directory**: To be able to run properly the server, Vapor recommends to enable the working directory option and set it up pointing to the project root. This option will not shared by xcodes, so it must to be set up manually.
 ![](https://github.com/user-attachments/assets/86a10b80-d06f-45c6-8ad3-013caf157565)
 
+## Frontend with Leaf and Bootstrap
+The website is built using Vapor’s Leaf as the templating engine and Bootstrap for responsive and pre-designed components.
+
 ### Project Structure
 The project follows a modular architecture with the following components:
 - Domain: Contains core business logic and models.
@@ -114,3 +118,6 @@ The project follows a modular architecture with the following components:
 - Presentation: Prepares and formats data for API responses.
 - Composition: Assembles dependencies and builds the application.
 - API: Exposes the endpoints for client interactions.
+
+### CI/CD
+This project also has the same configuration as ExoplanetsAnalyzer](https://github.com/rpairo/exoplanets) in GitHub by Actions to perform the CI/CD flows: Run test, Scan vulnerabilities, Post to Docker Hub.
