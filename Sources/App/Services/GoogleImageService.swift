@@ -6,17 +6,11 @@ protocol ImageSearchServiceProtocol: Sendable {
 
 struct GoogleImageService: ImageSearchServiceProtocol {
     private let client: Client
-    private let apiKey: String
-    private let searchEngineId: String
+    private let config: AppConfigProtocol
 
-    init(client: Client) {
-        guard let apiKey = Environment.get("GOOGLE_API_KEY"),
-              let searchEngineId = Environment.get("GOOGLE_SEARCH_ENGINE_ID") else {
-            fatalError("Missing Google API Key or Search Engine ID in environment variables")
-        }
+    init(client: Client, config: AppConfigProtocol) {
         self.client = client
-        self.apiKey = apiKey
-        self.searchEngineId = searchEngineId
+        self.config = config
     }
 
     func fetchImage(for query: String) async throws -> String? {
@@ -24,8 +18,8 @@ struct GoogleImageService: ImageSearchServiceProtocol {
         let queryParams: [String: String] = [
             "q": query,
             "searchType": "image",
-            "key": apiKey,
-            "cx": searchEngineId,
+            "key": config.googleAPIKey,
+            "cx": config.googleSearchEngineID,
             "num": "1"
         ]
 
