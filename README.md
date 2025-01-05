@@ -34,27 +34,27 @@ The server simultaneously provides a website and an API:
 
 ### Website
 #### /website/
-![Orphans](https://github.com/user-attachments/assets/68e81179-8401-4553-8c59-3e358f9fec6d)
+![website-index](https://github.com/user-attachments/assets/68e81179-8401-4553-8c59-3e358f9fec6d)
 
 #### /website/orphans
-![Orphans](https://github.com/user-attachments/assets/defc00f0-b745-4cc4-a748-6099f15d0c84)
+![website-orphans](https://github.com/user-attachments/assets/defc00f0-b745-4cc4-a748-6099f15d0c84)
 
 #### /website/hottest
-![Orphans](https://github.com/user-attachments/assets/ca940fc4-d4b4-45fb-a0a4-498290d8f841)
+![website-hottest](https://github.com/user-attachments/assets/ca940fc4-d4b4-45fb-a0a4-498290d8f841)
 
 #### /website/timeline
-![Orphans](https://github.com/user-attachments/assets/38a6008d-f561-43e0-9346-30546a6cbd3e)
+![website-timeline](https://github.com/user-attachments/assets/38a6008d-f561-43e0-9346-30546a6cbd3e)
 
 
 ### API (JSON)
 #### /api/orphans
-![Orphans](https://github.com/user-attachments/assets/8b2bc416-af59-4741-9693-26a87121147c)
+![api-orphans](https://github.com/user-attachments/assets/8b2bc416-af59-4741-9693-26a87121147c)
 
 #### /api/hottest
-![Hottest](https://github.com/user-attachments/assets/b8b66bd0-6af6-43a7-b040-a9605a764291)
+![api-hottest](https://github.com/user-attachments/assets/b8b66bd0-6af6-43a7-b040-a9605a764291)
 
 #### /api/timeline
-![Timeline](https://github.com/user-attachments/assets/e36eeb0f-c700-4173-ac6b-1d911f4923a6)
+![api-timeline](https://github.com/user-attachments/assets/e36eeb0f-c700-4173-ac6b-1d911f4923a6)
 
 ## Testing
 #### Running the tests
